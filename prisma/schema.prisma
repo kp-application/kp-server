@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+enum Provider {
+    local
+    kakao
+    naver
+    github
+}
+
+model User {
+    userId    String    @id @default(uuid()) @map("user_id")
+    email     String    @unique @db.VarChar(40)
+    name      String    @db.VarChar(10)
+    password  String    @db.VarChar(100)
+    createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+    updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+    deletedAt DateTime? @map("deleted_at") @db.Timestamptz()
+
+    profile Profile?
+
+    @@map("user")
+}
+
+model Profile {
+    age                 Int      @db.Integer
+    gender              String   @db.VarChar(2)
+    provider            Provider @default(local)
+    currentRefreshToken String?  @map("current_refresh_token") @db.VarChar(255)
+
+    user   User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
+    userId String @unique @map("user_id")
+
+    @@map("profile")
+}
