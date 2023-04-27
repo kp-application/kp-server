@@ -5,7 +5,7 @@ import { CreateUserLocalDto } from "src/domains/users/dto/create-user-local.dto"
 
 @Injectable()
 export class UserValidator {
-    findUserValidator(email) {
+    findUserValidator(email: string) {
         return Prisma.validator<Prisma.UserFindFirstArgs>()({
             where: {
                 email,

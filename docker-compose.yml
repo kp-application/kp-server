@@ -1,31 +1,23 @@
-version: '3'
-services:
-  tests:
-    build:
-      context: .
-      dockerfile: dockerfile
-    env_file:
-      - .env
-    environment:
-      - TEST_DB_HOST=host.docker.internal
-    volumes:
-      - /usr/src/app/node_modules
-      - ./:/usr/src/app
-
-#  redis-server:
-#    image: redis
-#  node-app:
-#    build: # . # node-app에서 사용할 dockerfile은 현재 디렉토리에 있다는 의미
+#version: '3'
+#services:
+#  tests:
+#    build:
 #      context: .
-#      dockerfile: dockerfile.local
-#    ports:
-#      - '80:3000'
+#      dockerfile: dockerfile
 #    env_file:
 #      - .env
 #    environment:
-#      - LOCAL_DB_HOST=host.docker.internal
+#      - TEST_DB_HOST=host.docker.internal
 #    volumes:
 #      - /usr/src/app/node_modules
 #      - ./:/usr/src/app
-#    deploy:
-#      replicas: 1
+
+version: '3'
+
+services:
+  redis:
+    image: redis
+    restart: always
+    container_name: prac-redis
+    ports:
+      - 10300:6379

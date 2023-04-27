@@ -1,9 +1,9 @@
-import { User, Profile, Provider } from "@prisma/client";
+import { User, UserProfileMeta, Provider } from "@prisma/client";
 
 export class CreateUserLocalDto
     implements
-        Pick<User, "email" | "name" | "password">,
-        Pick<Profile, "age" | "gender" | "provider">
+        Pick<User, "email" | "name" | "password" | "imageUrl">,
+        Pick<UserProfileMeta, "age" | "gender" | "phone" | "provider">
 {
     /**
      * @format email
@@ -36,5 +36,14 @@ export class CreateUserLocalDto
      * @maxLength 2
      */
     gender: string;
+
+    /**
+     * @minLength 10
+     * @maxLength 15
+     */
+    phone: string;
+
     provider: Provider;
+
+    imageUrl: string;
 }

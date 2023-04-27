@@ -14,8 +14,11 @@ import { LocalStrategy } from "./strategies/local.strategy";
 
 import { privateKey, publicKey } from "src/main";
 
+import { RedisModule } from "src/common/redis/redis.module";
+
 @Module({
     imports: [
+        RedisModule,
         PassportModule.register({ session: false }),
         JwtModule.registerAsync({
             imports: [ConfigModule],
@@ -27,7 +30,9 @@ import { privateKey, publicKey } from "src/main";
                     signOptions: {
                         issuer: configService.get("JWT_ISSUER"),
                         algorithm: configService.get("JWT_ALGORITHM"),
-                        expiresIn: configService.get("JWT_EXPIRESIN"),
+                        expiresIn: configService.get(
+                            "JWT_ACCESS_TOKEN_EXPIRATION",
+                        ),
                     },
                 };
 
