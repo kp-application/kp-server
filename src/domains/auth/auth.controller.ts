@@ -1,4 +1,4 @@
-import { Controller } from "@nestjs/common";
+import { Controller, Inject } from "@nestjs/common";
 import { TypedRoute, TypedBody, TypedParam, TypedQuery } from "@nestia/core";
 
 import { AuthService } from "src/domains/auth/auth.service";
@@ -6,9 +6,16 @@ import { AuthService } from "src/domains/auth/auth.service";
 import { CreateUserLocalDto } from "src/domains/users/dto/create-user-local.dto";
 import { LoginUserDto } from "src/domains/users/dto/login-user.dto";
 
+import envConfig from "src/common/config/env/env.config";
+import { ConfigType } from "@nestjs/config";
+
 @Controller({ path: "api/v1/auth", version: "1" })
 export class AuthController {
-    constructor(private readonly authService: AuthService) {}
+    constructor(
+        private readonly authService: AuthService,
+        @Inject(envConfig.KEY)
+        private readonly config: ConfigType<typeof envConfig>,
+    ) {}
 
     @TypedRoute.Post("signup")
     async createUser(@TypedBody() createUserLocalDto: CreateUserLocalDto) {
