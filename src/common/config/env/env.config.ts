@@ -7,4 +7,5 @@ export default registerAs("env", () => ({
         expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION,
         passphrase: process.env.PASSPHRASE,
     },
+    cloudStorage: {},
 }));

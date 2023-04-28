@@ -5,13 +5,21 @@ import { ConfigType } from "@nestjs/config";
 import { Algorithm } from "jsonwebtoken";
 
 import envConfig from "src/common/config/env/env.config";
+import * as process from "process";
 
 @Injectable()
 export class EnvService {
     constructor(
         @Inject(envConfig.KEY)
         private readonly config: ConfigType<typeof envConfig>,
-    ) {}
+    ) {
+        const result = fs.readFileSync(
+            path.resolve(process.env.PWD, ""),
+            "utf8",
+        );
+
+        process.env.GOOGLE_APPLICATION_CREDENTIALS = result;
+    }
 
     getRedisEnv() {
         return "redis";
@@ -40,4 +48,6 @@ export class EnvService {
             publicKey,
         };
     }
+
+    getCloudStorageEnv() {}
 }

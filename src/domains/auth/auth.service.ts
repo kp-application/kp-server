@@ -7,7 +7,7 @@ import { UserService } from "src/domains/users/user.service";
 import { UserValidator } from "src/domains/users/user.validator";
 import { CreateUserLocalDto } from "src/domains/users/dto/create-user-local.dto";
 import { LoginUserDto } from "src/domains/users/dto/login-user.dto";
-import { RedisCacheService } from "src/common/redis/redis.service";
+import { RedisCacheService } from "src/common/modules/redis/redis.service";
 
 @Injectable()
 export class AuthService {
