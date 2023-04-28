@@ -7,7 +7,7 @@ import { UserService } from "src/domains/users/user.service";
 import { UserValidator } from "src/domains/users/user.validator";
 import { CreateUserLocalDto } from "src/domains/users/dto/create-user-local.dto";
 import { LoginUserDto } from "src/domains/users/dto/login-user.dto";
-import { RedisCacheService } from "src/common/redis/redis.service";
+import { RedisCacheService } from "src/common/modules/redis/redis.service";
 
 @Injectable()
 export class AuthService {
@@ -60,13 +60,13 @@ export class AuthService {
 
         let getToken = await this.redisCacheService.get(`${validation.email}`);
 
-        // if (!getToken) {
-        //     console.log("토큰이 없어 캐싱합니다.");
-        //     await this.redisCacheService.set(`${validation.email}`, token, {
-        //         ttl: 10000,
-        //     });
-        //     getToken = await this.redisCacheService.get(`${validation.email}`);
-        // }
+        if (!getToken) {
+            console.log("토큰이 없어 캐싱합니다.");
+            await this.redisCacheService.set(`${validation.email}`, token, {
+                ttl: 10000,
+            });
+            getToken = await this.redisCacheService.get(`${validation.email}`);
+        }
 
         return token;
     }

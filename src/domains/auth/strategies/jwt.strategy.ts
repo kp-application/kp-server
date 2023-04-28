@@ -3,20 +3,16 @@ import { ConfigService, ConfigType } from "@nestjs/config";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { PassportStrategy } from "@nestjs/passport";
 
-import envConfig from "src/common/config/env/env.config";
-import { publicKey } from "src/main";
+import { EnvService } from "src/common/modules/env/env.service";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    constructor(
-        @Inject(envConfig.KEY)
-        private readonly config: ConfigType<typeof envConfig>,
-    ) {
+    constructor(private readonly envService: EnvService) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: true,
-            secretOrKey: publicKey,
-            algorithms: config.jwt.algorithm,
+            secretOrKey: envService.getTokenSignatureMetaEnv().publicKey,
+            algorithms: envService.getTokenSignatureMetaEnv().algorithm,
         });
     }
 
