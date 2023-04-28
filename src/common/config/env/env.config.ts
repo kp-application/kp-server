@@ -5,5 +5,6 @@ export default registerAs("env", () => ({
         issuer: process.env.JWT_ISSUER,
         algorithm: process.env.JWT_ALGORITHM,
         expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION,
+        passphrase: process.env.PASSPHRASE,
     },
 }));

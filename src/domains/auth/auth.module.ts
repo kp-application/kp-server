@@ -1,6 +1,5 @@
 import { Module } from "@nestjs/common";
 import { JwtModule, JwtModuleOptions } from "@nestjs/jwt";
-import { ConfigModule, ConfigService } from "@nestjs/config";
 import { PassportModule } from "@nestjs/passport";
 
 import { PrismaService } from "src/prisma/prisma.service";
@@ -11,32 +10,30 @@ import { UserRepository } from "src/domains/users/user.repository";
 import { UserValidator } from "src/domains/users/user.validator";
 import { JwtStrategy } from "src/domains/auth/strategies/jwt.strategy";
 import { LocalStrategy } from "./strategies/local.strategy";
-
-import { privateKey, publicKey } from "src/main";
-
 import { RedisModule } from "src/common/redis/redis.module";
+import { EnvModule } from "src/common/config/env/env.module";
+import { EnvService } from "src/common/config/env/env.service";
 
 @Module({
     imports: [
         RedisModule,
         PassportModule.register({ session: false }),
         JwtModule.registerAsync({
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            useFactory: (configService: ConfigService) => {
-                const options: JwtModuleOptions = {
-                    publicKey,
+            imports: [EnvModule],
+            inject: [EnvService],
+            useFactory: (envService: EnvService): JwtModuleOptions => {
+                const { issuer, expiresIn, algorithm, privateKey, publicKey } =
+                    envService.getTokenSignatureMetaEnv();
+
+                return {
                     privateKey,
+                    publicKey,
                     signOptions: {
-                        issuer: configService.get("JWT_ISSUER"),
-                        algorithm: configService.get("JWT_ALGORITHM"),
-                        expiresIn: configService.get(
-                            "JWT_ACCESS_TOKEN_EXPIRATION",
-                        ),
+                        issuer,
+                        algorithm,
+                        expiresIn,
                     },
                 };
-
-                return options;
             },
         }),
     ],
@@ -49,6 +46,7 @@ import { RedisModule } from "src/common/redis/redis.module";
         UserRepository,
         JwtStrategy,
         LocalStrategy,
+        EnvService,
     ],
     exports: [AuthService],
 })

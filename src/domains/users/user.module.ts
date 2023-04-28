@@ -7,6 +7,7 @@ import { UserRepository } from "src/domains/users/user.repository";
 import { UserValidator } from "src/domains/users/user.validator";
 
 @Module({
+    imports: [],
     controllers: [UserController],
     providers: [UserService, UserRepository, UserValidator, PrismaService],
 })

@@ -60,13 +60,13 @@ export class AuthService {
 
         let getToken = await this.redisCacheService.get(`${validation.email}`);
 
-        // if (!getToken) {
-        //     console.log("토큰이 없어 캐싱합니다.");
-        //     await this.redisCacheService.set(`${validation.email}`, token, {
-        //         ttl: 10000,
-        //     });
-        //     getToken = await this.redisCacheService.get(`${validation.email}`);
-        // }
+        if (!getToken) {
+            console.log("토큰이 없어 캐싱합니다.");
+            await this.redisCacheService.set(`${validation.email}`, token, {
+                ttl: 10000,
+            });
+            getToken = await this.redisCacheService.get(`${validation.email}`);
+        }
 
         return token;
     }
