@@ -14,18 +14,30 @@ export class UserService {
     ) {}
 
     async createUser(createUserLocalDto: CreateUserLocalDto) {
-        const validation =
+        const userValidator =
             this.userValidator.createUserValidator(createUserLocalDto);
 
-        if (!validation)
+        if (!userValidator)
             throw new BadRequestException("요청 형식이 적합하지 않습니다.");
 
-        validation.data.password = await bcrypt.hash(
-            validation.data.password,
+        userValidator.data.password = await bcrypt.hash(
+            userValidator.data.password,
             10,
         );
 
-        return await this.userRepository.createUser(validation);
+        const createUser = await this.userRepository.createUser(userValidator);
+
+        const profileValidator = this.userValidator.createUserProfileValidator(createUserLocalDto, createUser.userId);
+
+        if (!profileValidator)
+            throw new BadRequestException("요청 형식이 적합하지 않습니다.");
+
+        const createProfile = await this.userRepository.createUserProfile(profileValidator);
+
+        return {
+            user: createUser,
+            profile: createProfile,
+        }
     }
 
     async findUserByEmail(email: string) {
