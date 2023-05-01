@@ -1,28 +1,28 @@
 import path from "path";
 import fs from "fs";
-import { Injectable, Inject } from "@nestjs/common";
-import { ConfigType } from "@nestjs/config";
-import { Algorithm } from "jsonwebtoken";
+import {Inject, Injectable} from "@nestjs/common";
+import {ConfigType} from "@nestjs/config";
+import {Algorithm} from "jsonwebtoken";
 
 import envConfig from "src/common/config/env/env.config";
 import * as process from "process";
 
 @Injectable()
 export class EnvService {
+    getRedisEnv() {
+        return "redis";
+    }
+
     constructor(
         @Inject(envConfig.KEY)
         private readonly config: ConfigType<typeof envConfig>,
     ) {
-        const result = fs.readFileSync(
-            path.resolve(process.env.PWD, ""),
-            "utf8",
-        );
-
-        process.env.GOOGLE_APPLICATION_CREDENTIALS = result;
-    }
-
-    getRedisEnv() {
-        return "redis";
+        // const result = fs.readFileSync(
+        //     path.resolve(process.env.PWD, "cloud.storage.json"),
+        //     "utf8",
+        // );
+        //
+        // process.env.GOOGLE_APPLICATION_CREDENTIALS = result;
     }
 
     getTokenSignatureMetaEnv() {
@@ -30,10 +30,10 @@ export class EnvService {
         const expiresIn = this.config.jwt.expiresIn;
         const algorithm = this.config.jwt.algorithm as Algorithm;
         const privateKey = fs
-            .readFileSync(path.resolve(process.env.PWD, "openssl/private.pem"))
+            .readFileSync(path.join(process.cwd(), "openssl/private.pem"), "utf8")
             .toString();
         const publicKey = fs
-            .readFileSync(path.resolve(process.env.PWD, "openssl/public.pem"))
+            .readFileSync(path.join(process.cwd(), "openssl/private.pem"), "utf8")
             .toString();
         const passphrase = this.config.jwt.passphrase;
 

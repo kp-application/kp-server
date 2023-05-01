@@ -45,5 +45,5 @@ export class CreateUserLocalDto
 
     provider: Provider;
 
-    imageUrl: string;
+    imageUrl: string | null;
 }

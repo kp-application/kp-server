@@ -18,4 +18,10 @@ export class UserRepository {
     ) {
         return this.prisma.user.create(userCreateInput);
     }
+
+    async createUserProfile(
+        userProfileInput: ReturnType<UserValidator["createUserProfileValidator"]>
+    ) {
+        return this.prisma.userProfileMeta.create(userProfileInput);
+    }
 }

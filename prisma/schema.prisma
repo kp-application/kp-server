@@ -2,98 +2,98 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum Provider {
-    local
-    kakao
-    naver
+  local
+  kakao
+  naver
 }
 
 enum RoomStatus {
-    online
-    offline
+  online
+  offline
 }
 
 model User {
-    userId    Int       @id() @default(autoincrement()) @map("user_id")
-    email     String    @unique @db.VarChar(40)
-    name      String    @db.VarChar(10)
-    password  String    @db.VarChar(100)
-    imageUrl  String?   @map("image_url") @db.VarChar(255)
-    createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
-    updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
-    deletedAt DateTime? @map("deleted_at") @db.Timestamptz()
+  userId    Int       @id() @default(autoincrement()) @map("user_id")
+  email     String    @unique @db.VarChar(40)
+  name      String    @db.VarChar(10)
+  password  String    @db.VarChar(100)
+  imageUrl  String?   @default("No image") @map("image_url") @db.VarChar(255)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz()
 
-    userProfileMeta UserProfileMeta?
+  userProfileMeta UserProfileMeta?
 
-    userCoupleMeta UserCoupleMeta?
+  userCoupleMeta UserCoupleMeta?
 
-    coupleRoom   CoupleRoom? @relation(fields: [coupleRoomId], references: [coupleRoomId])
-    coupleRoomId Int?        @unique() @map("couple_room_id")
+  coupleRoom   CoupleRoom? @relation(fields: [coupleRoomId], references: [coupleRoomId])
+  coupleRoomId Int?        @unique() @map("couple_room_id")
 
-    coupleRoomChats CoupleRoomChat?
+  coupleRoomChats CoupleRoomChat?
 
-    @@map("user")
+  @@map("user")
 }
 
 model UserProfileMeta {
-    age          Int      @db.Integer()
-    gender       String   @db.VarChar(2)
-    phone        String   @db.VarChar(15)
-    provider     Provider @default(local)
-    refreshToken String?  @map("refresh_token") @db.VarChar(255)
+  age          Int      @db.Integer()
+  gender       String   @db.VarChar(2)
+  phone        String   @db.VarChar(15)
+  provider     Provider @default(local)
+  refreshToken String?  @map("refresh_token") @db.VarChar(255)
 
-    user   User @relation(fields: [userId], references: [userId], onDelete: Cascade)
-    userId Int  @unique() @map("user_id")
+  user   User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId Int  @unique() @map("user_id")
 
-    @@map("user_profile_meta")
+  @@map("user_profile_meta")
 }
 
 model UserCoupleMeta {
-    isCouple     Boolean @default(false) @map("is_couple") @db.Boolean()
-    sendedCode   String? @map("sended_code") @db.VarChar(255)
-    receivedCode String? @map("received_code") @db.VarChar(255)
+  isCouple     Boolean @default(false) @map("is_couple") @db.Boolean()
+  sendedCode   String? @map("sended_code") @db.VarChar(255)
+  receivedCode String? @map("received_code") @db.VarChar(255)
 
-    user   User @relation(fields: [userId], references: [userId], onDelete: Cascade)
-    userId Int  @unique() @map("user_id")
+  user   User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId Int  @unique() @map("user_id")
 
-    @@map("user_couple_meta")
+  @@map("user_couple_meta")
 }
 
 model CoupleRoom {
-    coupleRoomId Int        @id() @default(autoincrement()) @map("couple_room_id")
-    title        String     @db.VarChar(20)
-    imageUrl     String     @map("image_url") @db.VarChar(255)
-    status       RoomStatus @default(offline)
-    createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamptz()
-    updatedAt    DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
-    deletedAt    DateTime?  @map("deleted_at") @db.Timestamptz()
+  coupleRoomId Int        @id() @default(autoincrement()) @map("couple_room_id")
+  title        String     @db.VarChar(20)
+  imageUrl     String     @map("image_url") @db.VarChar(255)
+  status       RoomStatus @default(offline)
+  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt    DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+  deletedAt    DateTime?  @map("deleted_at") @db.Timestamptz()
 
-    users User[]
+  users User[]
 
-    CoupleRoomChat CoupleRoomChat?
+  CoupleRoomChat CoupleRoomChat?
 
-    @@map("couple_room")
+  @@map("couple_room")
 }
 
 model CoupleRoomChat {
-    coupleRoomChatId Int      @id() @default(autoincrement()) @map("couple_room_chat_id")
-    content          String?  @db.VarChar(255)
-    imageUrl         String?  @map("image_url") @db.VarChar(255)
-    createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  coupleRoomChatId Int      @id() @default(autoincrement()) @map("couple_room_chat_id")
+  content          String?  @db.VarChar(255)
+  imageUrl         String?  @map("image_url") @db.VarChar(255)
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz()
 
-    user   User @relation(fields: [userId], references: [userId])
-    userId Int  @unique()
+  user   User @relation(fields: [userId], references: [userId])
+  userId Int  @unique()
 
-    coupleRoom   CoupleRoom @relation(fields: [coupleRoomId], references: [coupleRoomId], onDelete: Cascade)
-    coupleRoomId Int        @unique() @map("couple_room_id")
+  coupleRoom   CoupleRoom @relation(fields: [coupleRoomId], references: [coupleRoomId], onDelete: Cascade)
+  coupleRoomId Int        @unique() @map("couple_room_id")
 
-    @@map("couple_room_chat")
+  @@map("couple_room_chat")
 }
