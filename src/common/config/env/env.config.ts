@@ -7,5 +7,10 @@ export default registerAs("env", () => ({
         expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION,
         passphrase: process.env.PASSPHRASE,
     },
-    cloudStorage: {},
+    cloudStorage: {
+        acl: process.env.CLOUD_STORAGE_ACL,
+        bucket: process.env.CLOUD_STORAGE_BUCKET,
+        projectId: process.env.CLOUD_STORAGE_PROJECTID,
+        keyFilename: process.env.CLOUD_STORAGE_KEYFILENAME,
+    },
 }));
