@@ -5,6 +5,9 @@
 /dist
 /node_modules
 
+*.storage.json
+cloud.storage.json
+
 # Logs
 logs
 *.log
