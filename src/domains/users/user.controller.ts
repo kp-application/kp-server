@@ -14,9 +14,13 @@ export class UserController {
     constructor() {}
 
     @TypedRoute.Post("image")
-    @UseInterceptors(FileInterceptor("file", new MulterBuilder().build()))
+    @UseInterceptors(
+        FileInterceptor(
+            "file",
+            new MulterBuilder().setAllowImageProfile().build(),
+        ),
+    )
     async uploadProfileImage(@UploadedFile() file: Express.Multer.File) {
-        console.log(file);
         return "here";
     }
 }

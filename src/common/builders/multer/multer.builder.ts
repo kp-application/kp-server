@@ -4,13 +4,27 @@ import MulterGoogleCloudStorage from "multer-cloud-storage";
 import {
     TMyMulterOptions,
     TAcl,
+    TAllowType,
     fileFilter,
 } from "src/common/builders/multer/multer.option";
 
 export class MulterBuilder {
+    #type: TAllowType;
     #path: string;
 
     constructor() {}
+
+    setAllowImageProfile() {
+        this.#type = "image";
+        this.#path = "profile";
+        return this;
+    }
+
+    setAllowImageAlbum() {
+        this.#type = "image";
+        this.#path = "album";
+        return this;
+    }
 
     build(): TMyMulterOptions {
         return {
@@ -24,10 +38,14 @@ export class MulterBuilder {
                     file: Express.Multer.File,
                     done: Function,
                 ) => {
-                    done(null, "test/admidfdfn.png");
+                    const name = Buffer.from(
+                        file.originalname,
+                        "latin1",
+                    ).toString("utf8");
+                    done(null, `/${this.#path}/${name}${new Date()}`);
                 },
             }),
-            fileFilter: fileFilter("image"),
+            fileFilter: fileFilter(this.#type),
         };
     }
 }

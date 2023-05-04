@@ -10,13 +10,11 @@ import { UserRepository } from "src/domains/users/user.repository";
 import { UserValidator } from "src/domains/users/user.validator";
 import { JwtStrategy } from "src/domains/auth/strategies/jwt.strategy";
 import { LocalStrategy } from "./strategies/local.strategy";
-import { RedisModule } from "src/common/modules/redis/redis.module";
 import { EnvModule } from "src/common/modules/env/env.module";
 import { EnvService } from "src/common/modules/env/env.service";
 
 @Module({
     imports: [
-        RedisModule,
         PassportModule.register({ session: false }),
         JwtModule.registerAsync({
             imports: [EnvModule],

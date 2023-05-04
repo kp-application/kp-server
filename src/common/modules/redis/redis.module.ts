@@ -1,21 +1,18 @@
-import { Module, CacheModule } from "@nestjs/common";
-import redisStore from "cache-manager-redis-store";
+import { CacheModule } from "@nestjs/common";
+import { redisStore } from "cache-manager-redis-store";
 
-import { EnvModule } from "src/common/modules/env/env.module";
-import { EnvService } from "src/common/modules/env/env.service";
-import { RedisCacheService } from "src/common/modules/redis/redis.service";
-
-@Module({
-    imports: [
-        CacheModule.register({
-            imports: [EnvModule],
-            inject: [EnvService],
-            useFactory: (envService: EnvService) => {
-                return "here";
+export const redisConfig = {
+    isGlobal: true,
+    useFactory: async () => {
+        const store = await redisStore({
+            socket: {
+                host: "localhost",
+                port: 6379,
             },
-        }),
-    ],
-    providers: [RedisCacheService],
-    exports: [RedisCacheService],
-})
-export class RedisModule {}
+        });
+
+        return {
+            store: () => store,
+        };
+    },
+};
