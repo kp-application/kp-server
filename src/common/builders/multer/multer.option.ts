@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { BadRequestException } from "@nestjs/common";
 import { MulterOptions } from "@nestjs/platform-express/multer/interfaces/multer-options.interface";
 
 export type TAllowType = "image" | "video";
@@ -41,9 +42,12 @@ export const fileFilter =
             (mimeType) => mimeType === file.mimetype,
         );
 
-        // 타입 매개변수 수정
+        console.log("File     ", file);
 
-        if (!prepareMimeType) done(null, false);
+        if (!prepareMimeType)
+            return done(
+                new BadRequestException("허용된 형식의 파일이 아닙니다."),
+            );
 
         done(null, true);
     };
