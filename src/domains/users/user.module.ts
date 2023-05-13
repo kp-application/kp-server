@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
 
 import { PrismaService } from "src/prisma/prisma.service";
 import { UserController } from "src/domains/users/user.controller";
@@ -16,6 +17,7 @@ import { EnvService } from "src/common/modules/env/env.service";
         UserValidator,
         PrismaService,
         EnvService,
+        JwtService,
     ],
 })
 export class UserModule {}
