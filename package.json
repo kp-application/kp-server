@@ -58,6 +58,7 @@
   "devDependencies": {
     "@nestia/sdk": "^1.0.20",
     "@nestjs/cli": "^9.0.0",
+    "@nestjs/devtools-integration": "^0.1.4",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
     "@types/bcrypt": "^5.0.0",

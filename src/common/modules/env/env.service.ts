@@ -9,20 +9,20 @@ import * as process from "process";
 
 @Injectable()
 export class EnvService {
-    getRedisEnv() {
-        return "redis";
-    }
-
     constructor(
         @Inject(envConfig.KEY)
         private readonly config: ConfigType<typeof envConfig>,
     ) {
         const result = fs.readFileSync(
-            path.resolve(process.env.PWD, config.cloudStorage.keyFilename),
+            path.resolve(process.cwd(), config.cloudStorage.keyFilename),
             "utf8",
         );
 
         process.env.GOOGLE_APPLICATION_CREDENTIALS = result;
+    }
+
+    getRedisEnv() {
+        return "redis";
     }
 
     getTokenSignatureMetaEnv() {
@@ -37,7 +37,7 @@ export class EnvService {
             .toString();
         const publicKey = fs
             .readFileSync(
-                path.join(process.cwd(), "openssl/private.pem"),
+                path.join(process.cwd(), "openssl/public.pem"),
                 "utf8",
             )
             .toString();

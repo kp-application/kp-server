@@ -14,13 +14,13 @@ export class MulterBuilder {
 
     constructor() {}
 
-    setAllowImageProfile() {
-        this.#type = "image";
+    setAllowProfileImage() {
         this.#path = "profile";
+        this.#type = "image";
         return this;
     }
 
-    setAllowImageAlbum() {
+    setAllowAlbumImage() {
         this.#type = "image";
         this.#path = "album";
         return this;
@@ -32,17 +32,14 @@ export class MulterBuilder {
                 acl: process.env.CLOUD_STORAGE_ACL as TAcl,
                 bucket: process.env.CLOUD_STORAGE_BUCKET,
                 projectId: process.env.CLOUD_STORAGE_PROJECTID,
-                keyFilename: process.env.CLOUD_STORAGE_KEYFILENAME,
+                keyFilename: "./cloud.storage.json",
                 filename: (
                     req: Request,
                     file: Express.Multer.File,
                     done: Function,
                 ) => {
-                    const name = Buffer.from(
-                        file.originalname,
-                        "latin1",
-                    ).toString("utf8");
-                    done(null, `/${this.#path}/${name}${new Date()}`);
+                    const saveName = new Date().getTime() + file.originalname;
+                    done(null, `/${this.#path}/${saveName}`);
                 },
             }),
             fileFilter: fileFilter(this.#type),

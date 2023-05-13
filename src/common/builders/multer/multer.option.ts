@@ -8,7 +8,7 @@ export type TMyMulterOptions = Pick<
     "storage" | "fileFilter" | "limits"
 >;
 export type TFileSize = number;
-export type TLimitFileSizes = "5MB" | "10MB";
+export type TLimitFileSizes = "10MB" | "50MB";
 export type TAcl = "publicRead" | "private";
 
 export const imageMimeTypes = [
@@ -30,8 +30,8 @@ export const audioMimeTypes = [
     "audio/mp3",
 ];
 export const TLimitFileSize: Record<TLimitFileSizes, TFileSize> = {
-    "5MB": 5 * 1_024 * 1_024,
     "10MB": 10 * 1_024 * 1_024,
+    "50MB": 50 * 1_024 * 1_024,
 };
 
 export const fileFilter =
@@ -41,8 +41,6 @@ export const fileFilter =
         const prepareMimeType = allowType.find(
             (mimeType) => mimeType === file.mimetype,
         );
-
-        console.log("File     ", file);
 
         if (!prepareMimeType)
             return done(

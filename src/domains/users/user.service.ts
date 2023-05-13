@@ -27,17 +27,22 @@ export class UserService {
 
         const createUser = await this.userRepository.createUser(userValidator);
 
-        const profileValidator = this.userValidator.createUserProfileValidator(createUserLocalDto, createUser.userId);
+        const profileValidator = this.userValidator.createUserProfileValidator(
+            createUserLocalDto,
+            createUser.userId,
+        );
 
         if (!profileValidator)
             throw new BadRequestException("요청 형식이 적합하지 않습니다.");
 
-        const createProfile = await this.userRepository.createUserProfile(profileValidator);
+        const createProfile = await this.userRepository.createUserProfile(
+            profileValidator,
+        );
 
         return {
             user: createUser,
             profile: createProfile,
-        }
+        };
     }
 
     async findUserByEmail(email: string) {
@@ -50,4 +55,6 @@ export class UserService {
 
         return result;
     }
+
+    async updateUserImage(updateUserImageDto: Express.Multer.File) {}
 }
