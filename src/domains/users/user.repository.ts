@@ -7,20 +7,17 @@ import { UserValidator } from "src/domains/users/user.validator";
 export class UserRepository {
     constructor(private readonly prisma: PrismaService) {}
 
-    async findUserByEmail(
-        email: ReturnType<UserValidator["findUserValidator"]>,
-    ) {
+    async findUserByEmail(email: ReturnType<UserValidator["findUserValidator"]>) {
         return this.prisma.user.findUnique(email);
     }
 
-    async createUser(
-        userCreateInput: ReturnType<UserValidator["createUserValidator"]>,
-    ) {
+    async createUser(userCreateInput: any) {
+        // : ReturnType<UserValidator["createUserValidator"]>
         return this.prisma.user.create(userCreateInput);
     }
 
     async createUserProfile(
-        userProfileInput: ReturnType<UserValidator["createUserProfileValidator"]>
+        userProfileInput: ReturnType<UserValidator["createUserProfileValidator"]>,
     ) {
         return this.prisma.userProfileMeta.create(userProfileInput);
     }

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import {Prisma, UserProfileMeta} from "@prisma/client";
+import { Prisma, UserProfileMeta } from "@prisma/client";
 
 import { CreateUserLocalDto } from "src/domains/users/dto/create-user-local.dto";
 
@@ -21,28 +21,42 @@ export class UserValidator {
     createUserValidator({
         email,
         name,
-        password
+        password,
+        age,
+        gender,
+        phone,
+        provider,
     }: CreateUserLocalDto) {
         return Prisma.validator<Prisma.UserCreateArgs>()({
             data: {
                 email,
                 name,
                 password,
+                userProfileMeta: {
+                    create: {
+                        age,
+                        gender,
+                        phone,
+                    },
+                },
             },
-            select: {
-                userId: true,
-                email: true,
-                name: true,
-            }
+            include: {
+                userProfileMeta: {
+                    select: {
+                        age: true,
+                        gender: true,
+                        phone: true,
+                        provider: true,
+                    },
+                },
+            },
         });
     }
 
-    createUserProfileValidator({
-        age,
-        gender,
-        provider,
-        phone,
-   }: CreateUserLocalDto, userId: number) {
+    createUserProfileValidator(
+        { age, gender, provider, phone }: CreateUserLocalDto,
+        userId: number,
+    ) {
         return Prisma.validator<Prisma.UserProfileMetaCreateArgs>()({
             data: {
                 age,
@@ -54,7 +68,7 @@ export class UserValidator {
                 age: true,
                 gender: true,
                 phone: true,
-            }
-        })
+            },
+        });
     }
 }
