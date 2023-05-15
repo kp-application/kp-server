@@ -43,14 +43,16 @@ export class AuthService {
         if (existUser)
             throw new ConflictException("이미 존재하는 이메일입니다.");
 
-        const { user, profile } = await this.userService.createUser(
-            createUserLocalDto,
-        );
+        await this.userService.createUser(createUserLocalDto);
 
-        return {
-            user,
-            profile,
-        };
+        // const { user, profile } = await this.userService.createUser(
+        //     createUserLocalDto,
+        // );
+        //
+        // return {
+        //     user,
+        //     profile,
+        // };
     }
 
     async login(loginUserDto: LoginUserDto) {
