@@ -1,10 +1,4 @@
-import {
-    Controller,
-    Post,
-    UploadedFile,
-    UseInterceptors,
-    UseGuards,
-} from "@nestjs/common";
+import { Controller, Post, UploadedFile, UseInterceptors, UseGuards } from "@nestjs/common";
 import { TypedRoute } from "@nestia/core";
 import { FileInterceptor } from "@nestjs/platform-express";
 
@@ -18,22 +12,19 @@ export class UserController {
     constructor(private readonly userService: UserService) {}
 
     @TypedRoute.Post("profile-image")
-    @UseInterceptors(
-        FileInterceptor(
-            "file",
-            new MulterBuilder().setAllowProfileImage().build(),
-        ),
-    )
+    @UseInterceptors(FileInterceptor("file", new MulterBuilder().setAllowProfileImage().build()))
     async uploadProfileImage(@UploadedFile() file: Express.Multer.File) {
-        // 사용자 아이디도
-        const result = await this.userService.updateUserImage(file);
+        // const result = await this.userService.updateUserImage(file);
         return "here";
     }
 
     @TypedRoute.Get("guard")
     @UseGuards(AuthGuard)
     async test(@User() user: any) {
-        console.log("Controller", user);
+        const result = await this.userService.updateUserImage();
+
+        console.log(result);
+
         return "here";
     }
 }

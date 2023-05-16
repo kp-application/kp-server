@@ -2,6 +2,8 @@ import bcrypt from "bcrypt";
 import { Injectable } from "@nestjs/common";
 import { UnauthorizedException, ConflictException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
+import { InjectRedis } from "@liaoliaots/nestjs-redis";
+import Redis from "ioredis";
 
 import { UserService } from "src/domains/users/user.service";
 import { UserValidator } from "src/domains/users/user.validator";
@@ -14,45 +16,27 @@ export class AuthService {
         private readonly userValidator: UserValidator,
         private readonly userService: UserService,
         private readonly jwtService: JwtService,
+        @InjectRedis() private readonly redis: Redis,
     ) {}
 
     async validateUser(loginUserDto: LoginUserDto) {
-        const existUser = await this.userService.findUserByEmail(
-            loginUserDto.email,
-        );
+        const existUser = await this.userService.findUserByEmail(loginUserDto.email);
 
-        if (!existUser)
-            throw new ConflictException("존재하지 않는 사용자입니다.");
+        if (!existUser) throw new ConflictException("존재하지 않는 사용자입니다.");
 
-        const comparePassword = await bcrypt.compare(
-            loginUserDto.password,
-            existUser.password,
-        );
+        const comparePassword = await bcrypt.compare(loginUserDto.password, existUser.password);
 
-        if (!comparePassword)
-            throw new UnauthorizedException("비밀번호가 일치하지 않습니다.");
+        if (!comparePassword) throw new UnauthorizedException("비밀번호가 일치하지 않습니다.");
 
         return existUser;
     }
 
     async createUser(createUserLocalDto: CreateUserLocalDto) {
-        const existUser = await this.userService.findUserByEmail(
-            createUserLocalDto.email,
-        );
+        const existUser = await this.userService.findUserByEmail(createUserLocalDto.email);
 
-        if (existUser)
-            throw new ConflictException("이미 존재하는 이메일입니다.");
+        if (existUser) throw new ConflictException("이미 존재하는 이메일입니다.");
 
         await this.userService.createUser(createUserLocalDto);
-
-        // const { user, profile } = await this.userService.createUser(
-        //     createUserLocalDto,
-        // );
-        //
-        // return {
-        //     user,
-        //     profile,
-        // };
     }
 
     async login(loginUserDto: LoginUserDto) {
