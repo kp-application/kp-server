@@ -4,7 +4,7 @@ import { BadRequestException } from "@nestjs/common";
 
 import { UserValidator } from "src/domains/users/user.validator";
 import { UserRepository } from "src/domains/users/user.repository";
-import { PrismaService } from "src/prisma/prisma.service";
+import { PrismaService } from "src/common/modules/prisma/prisma.service";
 import { CreateUserLocalDto } from "src/domains/users/dto/create-user-local.dto";
 
 @Injectable()
@@ -18,9 +18,12 @@ export class UserService {
     async createUser(createUserLocalDto: CreateUserLocalDto) {
         const userInputValidation = this.userValidator.createUserValidator(createUserLocalDto);
 
-        const result = await this.userRepository.createUser(userInputValidation);
+        userInputValidation.data.password = await bcrypt.hash(
+            userInputValidation.data.password,
+            12,
+        );
 
-        console.log("Result     ", result);
+        const result = await this.userRepository.createUser(userInputValidation);
     }
 
     async findUserByEmail(email: string) {
@@ -33,5 +36,7 @@ export class UserService {
         return result;
     }
 
-    async updateUserImage(updateUserImageDto: Express.Multer.File) {}
+    async updateUserImage() {
+        return await this.prisma.rawQuery();
+    }
 }

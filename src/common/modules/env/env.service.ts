@@ -5,7 +5,6 @@ import { ConfigType } from "@nestjs/config";
 import { Algorithm } from "jsonwebtoken";
 
 import envConfig from "src/common/config/env/env.config";
-import * as process from "process";
 
 @Injectable()
 export class EnvService {
@@ -30,16 +29,10 @@ export class EnvService {
         const expiresIn = this.config.jwt.expiresIn;
         const algorithm = this.config.jwt.algorithm as Algorithm;
         const privateKey = fs
-            .readFileSync(
-                path.join(process.cwd(), "openssl/private.pem"),
-                "utf8",
-            )
+            .readFileSync(path.join(process.cwd(), "openssl/private.pem"), "utf8")
             .toString();
         const publicKey = fs
-            .readFileSync(
-                path.join(process.cwd(), "openssl/public.pem"),
-                "utf8",
-            )
+            .readFileSync(path.join(process.cwd(), "openssl/public.pem"), "utf8")
             .toString();
         const passphrase = this.config.jwt.passphrase;
 
@@ -66,6 +59,14 @@ export class EnvService {
             bucket,
             projectId,
             keyFilename,
+        };
+    }
+
+    getRedisMetaEnv() {
+        return {
+            host: this.config.redis.host,
+            port: this.config.redis.port,
+            password: this.config.redis.password,
         };
     }
 }

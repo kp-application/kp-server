@@ -13,4 +13,9 @@ export default registerAs("env", () => ({
         projectId: process.env.CLOUD_STORAGE_PROJECTID,
         keyFilename: process.env.CLOUD_STORAGE_KEYFILENAME,
     },
+    redis: {
+        host: process.env.REDIS_HOST,
+        port: Number(process.env.REDIS_PORT),
+        password: process.env.REDIS_PASSWORD,
+    },
 }));

@@ -4,8 +4,14 @@
 
 ### env
 ```.dotenv
-DATABASE_URL="postgresql://yourId:yourPassword@yourHost:yourPort/yourDatabase?schema=yourSchema"
+DATABASE_URL="postgresql://postgres:1234@localhost:5432/example?schema=kp"
 JWT_ISSUER=
 JWT_ALGORITHM=
-JWT_EXPIRESIN=
+JWT_ACCESS_TOKEN_EXPIRATION=
+JWT_REFRESH_TOKEN_EXPIRATION=
+PASSPHRASE=
+CLOUD_STORAGE_ACL=
+CLOUD_STORAGE_BUCKET=
+CLOUD_STORAGE_PROJECTID=
+CLOUD_STORAGE_KEYFILENAME=
 ```

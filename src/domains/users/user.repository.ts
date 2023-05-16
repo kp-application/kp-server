@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 
-import { PrismaService } from "src/prisma/prisma.service";
+import { PrismaService } from "src/common/modules/prisma/prisma.service";
 import { UserValidator } from "src/domains/users/user.validator";
 
 @Injectable()
@@ -11,7 +11,7 @@ export class UserRepository {
         return this.prisma.user.findUnique(email);
     }
 
-    async createUser(userCreateInput: any) {
+    async createUser(userCreateInput: ReturnType<UserValidator["createUserValidator"]>) {
         // : ReturnType<UserValidator["createUserValidator"]>
         return this.prisma.user.create(userCreateInput);
     }

@@ -10,4 +10,7 @@ export const validationSchema = joi.object({
     CLOUD_STORAGE_BUCKET: joi.string().required(),
     CLOUD_STORAGE_PROJECTID: joi.string().required(),
     CLOUD_STORAGE_KEYFILENAME: joi.string().required(),
+    REDIS_HOST: joi.string().required(),
+    REDIS_PORT: joi.number().required(),
+    REDIS_PASSWORD: joi.string().required(),
 });

@@ -26,4 +26,16 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
             await app.close();
         });
     }
+
+    async findUserByEmail(email: string) {
+        return this.user.findUnique({
+            where: {
+                email,
+            },
+        });
+    }
+
+    async rawQuery() {
+        return await this.$queryRaw`SELECT * FROM "user"`;
+    }
 }
