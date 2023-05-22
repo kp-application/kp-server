@@ -36,7 +36,9 @@ export class UserService {
         return result;
     }
 
-    async updateUserImage() {
-        return await this.prisma.rawQuery();
+    async updateUserImage(email: string) {
+        const user = await this.prisma.findUserByEmail(email);
+
+        return user;
     }
 }
