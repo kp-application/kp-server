@@ -1,6 +1,11 @@
 import { registerAs } from "@nestjs/config";
 
 export default registerAs("env", () => ({
+    nodeEnv: process.env.NODE_ENV,
+    openSsl: {
+        privateKeyDir: process.env.OPENSSL_PRIVATE_KEY_DIR,
+        publicDir: process.env.OPENSSL_PUBLIC_KEY_DIR,
+    },
     jwt: {
         issuer: process.env.JWT_ISSUER,
         algorithm: process.env.JWT_ALGORITHM,

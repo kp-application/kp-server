@@ -1,5 +1,5 @@
 import { INestApplication, Injectable, OnModuleInit } from "@nestjs/common";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma, User } from "@prisma/client";
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
@@ -10,6 +10,12 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
                 { emit: "stdout", level: "error" },
             ],
         });
+
+        this.$on<"beforeExit">("beforeExit", async () => {
+            console.log("Shutting down server");
+        });
+
+        // this.$on<any>("query", (event) => console.log("Event", event));
     }
 
     async onModuleInit() {
@@ -27,15 +33,33 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
         });
     }
 
-    async findUserByEmail(email: string) {
-        return this.user.findUnique({
-            where: {
-                email,
-            },
-        });
+    async rawQuery() {
+        // return await this.$queryRaw`SELECT * FROM "user"`;
+        // return await this.$queryRaw(Prisma.sql`SELECT * FROM "user"`);
+        return await this.$executeRaw`SELECT * FROM "user"`;
     }
 
-    async rawQuery() {
-        return await this.$queryRaw`SELECT * FROM "user"`;
+    async findUserByEmail(email: string) {
+        const transactionResults = await this.$transaction(async () => {
+            const user = await this.user.findUnique({
+                where: {
+                    email,
+                },
+                select: {
+                    userId: true,
+                    name: true,
+                    email: true,
+                    userProfileMeta: {
+                        select: {
+                            age: true,
+                            gender: true,
+                            provider: true,
+                        },
+                    },
+                },
+            });
+        });
+
+        return transactionResults;
     }
 }
