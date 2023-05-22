@@ -20,19 +20,15 @@ export class EnvService {
         process.env.GOOGLE_APPLICATION_CREDENTIALS = result;
     }
 
-    getRedisEnv() {
-        return "redis";
-    }
-
     getTokenSignatureMetaEnv() {
         const issuer = this.config.jwt.issuer;
         const expiresIn = this.config.jwt.expiresIn;
         const algorithm = this.config.jwt.algorithm as Algorithm;
         const privateKey = fs
-            .readFileSync(path.join(process.cwd(), "openssl/private.pem"), "utf8")
+            .readFileSync(path.join(process.cwd(), this.config.openSsl.privateKeyDir), "utf8")
             .toString();
         const publicKey = fs
-            .readFileSync(path.join(process.cwd(), "openssl/public.pem"), "utf8")
+            .readFileSync(path.join(process.cwd(), this.config.openSsl.publicDir), "utf8")
             .toString();
         const passphrase = this.config.jwt.passphrase;
 
@@ -46,6 +42,10 @@ export class EnvService {
             },
             publicKey,
         };
+    }
+
+    getNodeEnv() {
+        return this.config.nodeEnv;
     }
 
     getCloudStorageMetaEnv() {

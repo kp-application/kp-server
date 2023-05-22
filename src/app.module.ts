@@ -1,4 +1,5 @@
 import path from "path";
+import { APP_FILTER } from "@nestjs/core";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { RedisModule } from "@liaoliaots/nestjs-redis";
@@ -10,6 +11,7 @@ import { EnvModule } from "src/common/modules/env/env.module";
 import { EnvService } from "src/common/modules/env/env.service";
 import envConfig from "src/common/config/env/env.config";
 import { validationSchema } from "src/common/config/env/validator-schema";
+import { CustomExceptionFilter } from "src/common/filters/htpp-exception.filter";
 
 @Module({
     imports: [
@@ -38,5 +40,6 @@ import { validationSchema } from "src/common/config/env/validator-schema";
             },
         }),
     ],
+    providers: [CustomExceptionFilter],
 })
 export class AppModule {}

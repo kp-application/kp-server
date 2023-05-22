@@ -1,7 +1,10 @@
 import joi from "joi";
 
 export const validationSchema = joi.object({
+    NODE_ENV: joi.string().required(),
     DATABASE_URL: joi.string().required(),
+    OPENSSL_PRIVATE_KEY_DIR: joi.string().required(),
+    OPENSSL_PUBLIC_KEY_DIR: joi.string().required(),
     JWT_ISSUER: joi.string().required(),
     JWT_ALGORITHM: joi.string().required(),
     JWT_ACCESS_TOKEN_EXPIRATION: joi.string().required(),

@@ -6,7 +6,9 @@ import { MulterBuilder } from "src/common/builders/multer/multer.builder";
 import { UserService } from "src/domains/users/user.service";
 import { AuthGuard } from "src/domains/auth/guards/auth.guard";
 import { User } from "src/common/decorators/user.decorator";
+import { LoggingInterceptor } from "src/common/interceptors/logging.interceptor";
 
+@UseInterceptors(LoggingInterceptor)
 @Controller({ path: "api/v1/user", version: "1" })
 export class UserController {
     constructor(private readonly userService: UserService) {}
@@ -21,10 +23,8 @@ export class UserController {
     @TypedRoute.Get("guard")
     @UseGuards(AuthGuard)
     async test(@User() user: any) {
-        const result = await this.userService.updateUserImage();
+        const result = await this.userService.updateUserImage("bee@admin.com");
 
-        console.log(result);
-
-        return "here";
+        return "failed";
     }
 }
