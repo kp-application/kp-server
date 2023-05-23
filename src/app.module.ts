@@ -40,6 +40,11 @@ import { CustomExceptionFilter } from "src/common/filters/htpp-exception.filter"
             },
         }),
     ],
-    providers: [CustomExceptionFilter],
+    providers: [
+        {
+            provide: APP_FILTER,
+            useClass: CustomExceptionFilter,
+        },
+    ],
 })
 export class AppModule {}
