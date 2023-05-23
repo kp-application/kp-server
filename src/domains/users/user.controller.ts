@@ -7,6 +7,7 @@ import { UserService } from "src/domains/users/user.service";
 import { AuthGuard } from "src/domains/auth/guards/auth.guard";
 import { User } from "src/common/decorators/user.decorator";
 import { LoggingInterceptor } from "src/common/interceptors/logging.interceptor";
+import { UserResponseDto } from "src/domains/users/dto/user-response.dto";
 
 @UseInterceptors(LoggingInterceptor)
 @Controller({ path: "api/v1/user", version: "1" })
@@ -21,10 +22,20 @@ export class UserController {
     }
 
     @TypedRoute.Get("guard")
-    @UseGuards(AuthGuard)
+    // @UseGuards(AuthGuard)
     async test(@User() user: any) {
-        const result = await this.userService.updateUserImage("bee@admin.com");
+        try {
+            const result = await this.userService.updateUserImage("bee@admin.com");
 
-        return "failed";
+            console.log("result", result);
+
+            return {
+                message: "success",
+                statusCode: 200,
+                data: user,
+            };
+        } catch (err) {
+            console.log(err);
+        }
     }
 }

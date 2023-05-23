@@ -1,4 +1,5 @@
 import compression from "compression";
+import { ClassSerializerInterceptor } from "@nestjs/common";
 import { NestFactory, Reflector } from "@nestjs/core";
 
 import { AppModule } from "src/app.module";
@@ -9,6 +10,7 @@ async function bootstrap() {
         snapshot: true,
     });
 
+    app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
     app.useGlobalFilters(new CustomExceptionFilter());
     app.use(compression());
 

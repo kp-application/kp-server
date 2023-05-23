@@ -49,15 +49,10 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
                     userId: true,
                     name: true,
                     email: true,
-                    userProfileMeta: {
-                        select: {
-                            age: true,
-                            gender: true,
-                            provider: true,
-                        },
-                    },
                 },
             });
+
+            return user;
         });
 
         return transactionResults;
